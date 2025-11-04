@@ -46,8 +46,6 @@
 #define BATTERY_V_Max_mV        4200
 #define BATTERY_V_Warn_mV       3400
 #define BATTERY_V_Min_mV        3200
-#define BATTERY_V_Lowest_mV     3000
-#define BATTERY_V_Highest_mV    4150
 
 // #include "drivers/ina219.h"
 
@@ -241,7 +239,7 @@ void handleBatteryConnected ( ) {
 #ifdef INA219_Current
   // If the INA219_Current feature is enabled, estimate the remaining battery capacity.
   uint16_t v_u100mV  = vbat * 100;    // Convert battery voltage to hundred-millivolt units for calculations.
-  EstBatteryCapacity = ( ( v_u100mV - BATTERY_V_Lowest_mV ) * batteryCapacity ) / ( BATTERY_V_Highest_mV - BATTERY_V_Lowest_mV );
+  EstBatteryCapacity = ( ( v_u100mV - batteryCriticalVoltage ) * batteryCapacity ) / ( batteryMaxVoltage - batteryCriticalVoltage );
   // Calculate estimated battery capacity as a percentage of total capacity.
 #endif
 }

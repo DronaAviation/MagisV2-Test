@@ -28,10 +28,10 @@ extern "C" {
 #define API_VERSION_MAJOR         0     // increment when major changes are made
 #define API_VERSION_MINOR         26    // increment when any change is made, reset to zero when major changes are released after changing API_VERSION_MAJOR
 
-#define API_VERSION_LENGTH        7
+#define API_VERSION_LENGTH        2
 
 #define FC_FW_VERSION_MAJOR       2    // increment when a major release is made (big new feature, etc)
-#define FC_FW_VERSION_MINOR       3    // increment when a minor release is made (small new feature, change etc)
+#define FC_FW_VERSION_MINOR       4    // increment when a minor release is made (small new feature, change etc)
 #define FC_FW_VERSION_PATCH_LEVEL 0    // increment when a bug is fixed
 
 #define STR_HELPER( x )           #x
@@ -39,12 +39,6 @@ extern "C" {
 #define FC_FW_VERSION_STRING      STR ( FC_FW_VERSION_MAJOR ) "." STR ( FC_FW_VERSION_MINOR ) "." STR ( FC_FW_VERSION_PATCH_LEVEL )
 
 #define MW_VERSION                231
-
-#define FW_VERSION_LENGTH           10
-
-#define FW_RELEASE_TYPE              "O"
-
-#define PROJECT_LENGTH            8    // lower case hexadecimal digits.
 
 extern const char *const targetName;
 
@@ -60,7 +54,6 @@ extern const char *const buildTime;    // "HH:MM:SS"
 extern const char *const FwVersion;
 extern const char *const ApiVersion;
 extern const char *const FwName;
-extern const char *const Project;
 
 #ifdef __cplusplus
 }

@@ -160,7 +160,7 @@ extern "C" {
  * that use the API and the users of those tools.
  */
 
-#define MSP_PROTOCOL_VERSION                1
+#define MSP_PROTOCOL_VERSION                0
 
 #define MULTIWII_IDENTIFIER                 "MWII";
 #define CLEANFLIGHT_IDENTIFIER              "CLFL"
@@ -169,13 +169,10 @@ extern "C" {
 #define FLIGHT_CONTROLLER_IDENTIFIER_LENGTH 8
 static const char *const flightControllerIdentifier = MAGIS_IDENTIFIER;    // 4 UPPER CASE alpha numeric characters that identify the flight controller.
 
-#define FLIGHT_CONTROLLER_VERSION_LENGTH 6
+#define FLIGHT_CONTROLLER_VERSION_LENGTH 3
 #define FLIGHT_CONTROLLER_VERSION_MASK   0xFFF
 
-static const char *const fwReleaseType = FW_RELEASE_TYPE;
-
-static const char *const boardIdentifier
-          = TARGET_BOARD_IDENTIFIER;
+static const char *const boardIdentifier = TARGET_BOARD_IDENTIFIER;
 #if defined( PRIMUSX2 ) || defined( PRIMUS_V5 )
   #define BOARD_IDENTIFIER_LENGTH 9    // Used for PRIMUSX2 and PRIMUS_V5
 #elif defined( PRIMUS_X2_v1 )
@@ -202,16 +199,11 @@ static const char *const boardIdentifier
 
 */
 
-#define MSP_API_VERSION       1    // out message
-#define MSP_FC_VARIANT        2    // out message
-#define MSP_FC_FW_VERSION     3    // out message
-#define MSP_BOARD_INFO        4    // out message
-#define MSP_BUILD_INFO        5    // out message
-#define MSPII_API_VERSION     6    // out message
-#define MSPII_FC_FW_VERSION   7    // out message
-#define MSPII_FW_RELEASE_TYPE 8    // out message
-#define MSPII_PROJECT_NAME    9    // out message
-#define MSPII_BUILD_DATE      10
+#define MSP_API_VERSION   1    // out message
+#define MSP_FC_VARIANT    2    // out message
+#define MSP_FC_FW_VERSION 3    // out message
+#define MSP_BOARD_INFO    4    // out message
+#define MSP_BUILD_INFO    5    // out message
 
 //
 // MSP commands for Cleanflight original features
@@ -758,18 +750,11 @@ static bool processOutCommand ( uint8_t cmdMSP ) {
 
   switch ( cmdMSP ) {
     case MSP_API_VERSION:
-      headSerialReply ( 1 + 2 );
+      headSerialReply ( 1 + API_VERSION_LENGTH );
       serialize8 ( MSP_PROTOCOL_VERSION );
+
       serialize8 ( API_VERSION_MAJOR );
       serialize8 ( API_VERSION_MINOR );
-      break;
-
-    case MSPII_API_VERSION:
-      headSerialReply ( API_VERSION_LENGTH );
-      for ( i = 0; i < API_VERSION_LENGTH; i++ ) {
-        serialize8 ( ApiVersion [ i ] );
-      }
-
       break;
 
     case MSP_FC_VARIANT:
@@ -781,37 +766,11 @@ static bool processOutCommand ( uint8_t cmdMSP ) {
       break;
 
     case MSP_FC_FW_VERSION:
-      headSerialReply ( 3 );
+      headSerialReply ( FLIGHT_CONTROLLER_VERSION_LENGTH );
 
       serialize8 ( FC_FW_VERSION_MAJOR );
       serialize8 ( FC_FW_VERSION_MINOR );
       serialize8 ( FC_FW_VERSION_PATCH_LEVEL );
-      break;
-
-    case MSPII_FC_FW_VERSION:
-      headSerialReply ( FW_VERSION_LENGTH );
-      for ( i = 0; i < FW_VERSION_LENGTH; i++ ) {
-        serialize8 ( FwVersion [ i ] );
-      }
-      break;
-
-    case MSPII_FW_RELEASE_TYPE:
-      headSerialReply ( 1 );
-      serialize8 ( fwReleaseType [ 0 ] );
-      break;
-
-    case MSPII_PROJECT_NAME:
-      headSerialReply ( PROJECT_LENGTH );
-      for ( i = 0; i < PROJECT_LENGTH; i++ ) {
-        serialize8 ( Project [ i ] );
-      }
-      break;
-
-    case MSPII_BUILD_DATE:
-      headSerialReply ( BUILD_DATE_LENGTH );
-      for ( i = 0; i < BUILD_DATE_LENGTH; i++ ) {
-        serialize8 ( buildDate [ i ] );
-      }
       break;
 
     case MSP_BOARD_INFO:

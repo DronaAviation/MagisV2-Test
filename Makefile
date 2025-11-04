@@ -19,7 +19,7 @@
 #  ----------	---	---------------------------------------------------------   #
 ###############################################################################
 #
-# Makefile for building the cleanflight firmware.
+# Makefile for building the MasigV2 firmware.
 #
 # Invoke this with 'make help' to see the list of supported targets.
 #
@@ -27,12 +27,12 @@
 # User-configurable options
 FORKNAME	=	MAGISV2
 TARGET	?=	
-PROJECT ?= DEFAULT 
 BUILD_TYPE	?= BIN
+PROJECT ?= DEFAULT
 LIB_MAJOR_VERSION	=	1
 LIB_MINOR_VERSION	=	1
-FW_Version	=	3.0.0-beta
-API_Version	=	1.26.1
+FW_Version	=	2.4.0-beta
+API_Version	=	0.26.0
 # Flash size (KB).  Some low-end chips actually have more flash than advertised, use this to override.
 FLASH_SIZE	?=
 # Debugger optons, must be empty or GDB
@@ -119,12 +119,12 @@ CMSIS_SRC = $(notdir $(wildcard $(CMSIS_DIR)/CM1/CoreSupport/*.c \
                									$(CMSIS_DIR)/CM1/DeviceSupport/ST/STM32F30x/*.c))
 
 INCLUDE_DIRS := $(INCLUDE_DIRS) \
+								$(ROOT) \
            			$(STDPERIPH_DIR)/inc \
            			$(CMSIS_DIR)/CM1/CoreSupport \
            			$(CMSIS_DIR)/CM1/DeviceSupport/ST/STM32F30x \
            			$(USBFS_DIR)/inc \
-           			$(ROOT)/src/main/vcp \
-								$(ROOT)
+           			$(ROOT)/src/main/vcp
 
 VPATH :=	$(VPATH) \
 					$(USBFS_DIR)/src
@@ -470,7 +470,7 @@ $(TARGET_ELF):  $(TARGET_OBJS)
 # Compile
 
 
-libs/lib$(TARGET)_$(FW_Version).a: $(TARGET_OBJS)
+$(BUILD_DIR)/$(TARGET)/libs/lib$(TARGET)_$(FW_Version).a: $(TARGET_OBJS)
 	mkdir -p $(dir $@)
 	$(AR) rcs $@ $^
 
@@ -498,7 +498,7 @@ $(BUILD_DIR)/$(TARGET)/bin/%.o: %.S
 	@$(CC) -c -o $@ $(ASFLAGS) $<
 
 
-libcreate: libs/libpluto_$(LIB_MAJOR_VERSION).$(LIB_MINOR_VERSION).a
+libcreate: $(BUILD_DIR)/$(TARGET)/libs/lib$(TARGET)_$(FW_Version).a
 
 ## clean       : clean up all temporary / machine-generated files
 clean:
